@@ -1,14 +1,12 @@
-name: Encrypt Python Script
+name: Publish Python Package to PyPI
 
 on:
-  workflow_dispatch:
-    inputs:
-      file_name:
-        description: 'Name of the Python file to encrypt'
-        required: true
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger workflow on version tags like v1.0.0
 
 jobs:
-  encrypt:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,19 +16,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9'
+        python-version: '3.9'  # يمكنك تغيير الإصدار حسب مكتبتك
 
-    - name: Install Tofey
+    - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install .
+        pip install setuptools wheel twine
 
-    - name: Encrypt file
+    - name: Build and Publish to PyPI
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       run: |
-        python -c "from tofey import Tofey; Tofey.encrypt_script('${{ github.event.inputs.file_name }}', '${{ github.event.inputs.file_name }}.tofey')"
-
-    - name: Upload Encrypted File
-      uses: actions/upload-artifact@v3
-      with:
-        name: encrypted-file
-        path: ${{ github.event.inputs.file_name }}.tofey
+        python setup.py sdist bdist_wheel
+        twine upload dist/* -u __token__ -p $PYPI_TOKEN
