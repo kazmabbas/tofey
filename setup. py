@@ -1,2 +1,22 @@
-git tag v1.0.0
-git push origin v1.0.0
+from setuptools import setup, find_packages
+
+setup(
+    name="tofey",  # اسم المكتبة
+    version="1.0.0",  # الإصدار الأول
+    description="A Python library for encrypting Python tools",
+    long_description=open("README.md").read(),  # وصف أطول (اختياري)
+    long_description_content_type="text/markdown",
+    author="kazim",
+    author_email="kazmabbas554@gmail.com",
+    url="https://github.com/اسم-المستخدم/اسم-المستودع",  # رابط GitHub (اختياري)
+    packages=find_packages(),  # للبحث عن الحزم داخل المشروع
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.6",  # الحد الأدنى من إصدار Python
+    install_requires=[
+        # إذا كانت مكتبتك تعتمد على مكتبات أخرى، أضفها هنا
+    ],
+)
